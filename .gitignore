@@ -17,6 +17,7 @@ eggs/
 bin/
 lib/
 lib64/
+lib64
 include/
 parts/
 sdist/
