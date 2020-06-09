@@ -1,4 +1,6 @@
 from main import db
+import requests
+import xml.etree.ElementTree as ET
 
 
 class User:
@@ -57,4 +59,15 @@ def get_articles(tags, limit, page):
     bisect = limit // len(tags)
     for tag in tags:
         articles.extend(get_article_by_tag(tag, bisect, page))
+    return articles
+
+
+def get_news() -> list:
+    rss = requests.get("https://news.google.com/rss/search?q=news").content
+    root = ET.fromstring(rss)[0]
+    articles = []
+    for item in root.findall("item"):
+        article = {"title": item.find("title").text, "source": item.find("link").text}
+        articles.append(article)
+
     return articles

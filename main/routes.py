@@ -22,6 +22,12 @@ async def user(params: dict = Depends(main_params)):
     return {"status": "ok", "total_length": len(articles), "data": articles}
 
 
+@app.get("/api/news/")
+async def user():
+    news = get_news()
+    return {"status": "ok", "total_length": len(news), "data": news}
+
+
 @app.get("/api/tags/", response_model=TagsSchema)
 async def user():
     return {"status": "ok", "data": get_tags()}
