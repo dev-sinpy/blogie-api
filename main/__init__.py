@@ -5,12 +5,7 @@ import os
 
 app = FastAPI(title="blogie", docs_url=None, redoc_url="/api/doc")
 
-origins = [
-    "http://localhost",
-    "http://localhost:5000",
-    "http://localhost:8000",
-    "http://localhost:8080",
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
