@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List, Dict
+from datetime import date
 
 
 class User(BaseModel):
@@ -22,7 +23,7 @@ class ArticleSchema(BaseModel):
     title: str
     content: str
     thumbnail: str
-    publish_date: str
+    publish_date: date
     tags: List[str]
     url: str
     searched_for: str
