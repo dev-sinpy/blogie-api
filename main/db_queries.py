@@ -48,7 +48,9 @@ def get_article_by_tag(tag, limit, page):
     collection = db["data"]
     skip = limit if page > 1 else 0
     articles = []
-    for article in collection.find({"tags": tag}, skip=skip, limit=limit):
+    for article in collection.find({"tags": tag}, skip=skip, limit=limit).sort(
+        "publish_date", -1
+    ):
         article["searched_for"] = tag
         articles.append(article)
     return articles
