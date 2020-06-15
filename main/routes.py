@@ -3,6 +3,7 @@ from main import app
 from .schema import UserSchema, ArticleSchema, ArticleList, TagsSchema
 from main.db_queries import *
 from fastapi import Depends, HTTPException
+from random import shuffle
 
 
 async def main_params(q: str, limit: int = 20, page: int = 1):
@@ -15,10 +16,11 @@ async def user_params(email: str, tags: str):
 
 @app.get("/api/", response_model=ArticleList)
 async def user(params: dict = Depends(main_params)):
-    tags = params["q"]
-    limit = params["limit"]
-    page = params["page"]
-    articles = get_articles(tags, limit, page)
+    tags: list = params["q"]
+    limit: int = params["limit"]
+    page: int = params["page"]
+    shuffle(tags)
+    articles: list = get_articles(tags, limit, page)
     return {"status": "ok", "total_length": len(articles), "data": articles}
 
 
