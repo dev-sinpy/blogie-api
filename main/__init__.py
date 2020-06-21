@@ -3,7 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 import os
 
-app = FastAPI(title="blogie", docs_url=None, redoc_url="/api/doc")
+app = FastAPI(
+    title="blogie", openapi_url="/api/openapi.json", docs_url=None, redoc_url="/api/doc"
+)
 
 origins = ["*"]
 

@@ -15,7 +15,7 @@ async def user_params(email: str, tags: str):
 
 
 @app.get("/api/", response_model=ArticleList)
-async def user(params: dict = Depends(main_params)):
+async def articles(params: dict = Depends(main_params)):
     tags: list = params["q"]
     limit: int = params["limit"]
     page: int = params["page"]
@@ -25,17 +25,17 @@ async def user(params: dict = Depends(main_params)):
 
 
 @app.get("/api/news/")
-async def user():
+async def news():
     news = get_news()
     return {"status": "ok", "total_length": len(news), "data": news}
 
 
-@app.get("/api/tags/", response_model=TagsSchema)
-async def user():
+@app.get("/api/tags/", include_in_schema=False, response_model=TagsSchema)
+async def tags():
     return {"status": "ok", "data": get_tags()}
 
 
-@app.get("/api/user/{email}", response_model=UserSchema)
+@app.get("/api/user/{email}", include_in_schema=False, response_model=UserSchema)
 async def user(email: str):
     try:
         user = User(email)
@@ -46,8 +46,8 @@ async def user(email: str):
         raise HTTPException(status_code=404, detail="User not found")
 
 
-@app.post("/api/setuser/{email}", status_code=201)
-async def user(email: str):
+@app.post("/api/setuser/{email}", include_in_schema=False, status_code=201)
+async def set_user(email: str):
     try:
         user = User(email)
         user.set_user()
@@ -57,8 +57,8 @@ async def user(email: str):
         raise HTTPException(status_code=406, detail="email already in use")
 
 
-@app.post("/api/updateuser/", status_code=200)
-async def user(params: dict = Depends(user_params)):
+@app.post("/api/updateuser/", include_in_schema=False, status_code=200)
+async def update_user(params: dict = Depends(user_params)):
     email = params["email"]
     tags = params["tags"]
     user = User(email, tags)
@@ -67,8 +67,8 @@ async def user(params: dict = Depends(user_params)):
     return {"status": "ok"}
 
 
-@app.post("/api/deleteuser/{email}", status_code=200)
-async def user(email: str):
+@app.post("/api/deleteuser/{email}", include_in_schema=False, status_code=200)
+async def delete_user(email: str):
     user = User(email)
     user.delete_user()
 
