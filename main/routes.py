@@ -1,12 +1,13 @@
 from typing import List
 from main import app
-from .schema import UserSchema, ArticleSchema, ArticleList, TagsSchema
+from .schema import UserSchema, ArticleSchema, ArticleList, NewsList, TagsSchema
 from main.db_queries import *
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Query
 from random import shuffle
 
 
 async def main_params(q: str, limit: int = 20, page: int = 1):
+    limit: int = Query(20, title="hfehf", min_length=10, max_length="50")
     return {"q": q.split(","), "limit": limit, "page": page}
 
 
@@ -15,17 +16,31 @@ async def user_params(email: str, tags: str):
 
 
 @app.get("/api/", response_model=ArticleList)
-async def articles(params: dict = Depends(main_params)):
-    tags: list = params["q"]
-    limit: int = params["limit"]
-    page: int = params["page"]
+async def search(
+    q: str = Query(
+        ...,
+        title="query string",
+        description="Topics you want to search for. If you want to search for multiple tags then separate them with a comma.",
+    ),
+    limit: int = Query(20, title="limit", description="Limit response", ge=10, le=80,),
+    page: int = Query(
+        1, title="page", description="To skip over next page of response.", ge=1, le=10
+    ),
+):
+    """
+    Endpoint for searching articles.
+    """
+    tags: list = q.split(",")
     shuffle(tags)
     articles: list = get_articles(tags, limit, page)
     return {"status": "ok", "total_length": len(articles), "data": articles}
 
 
-@app.get("/api/news/")
+@app.get("/api/news/", response_model=NewsList)
 async def news():
+    """
+    Returns global news headlines.
+    """
     news = get_news()
     return {"status": "ok", "total_length": len(news), "data": news}
 

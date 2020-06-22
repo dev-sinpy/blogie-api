@@ -36,3 +36,14 @@ class ArticleList(BaseModel):
     status: str
     total_length: int
     data: List[ArticleSchema]
+
+
+class NewsSchema(BaseModel):
+    title: str
+    source: str
+
+
+class NewsList(BaseModel):
+    status: str
+    total_length: int
+    data: List[NewsSchema]

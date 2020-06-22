@@ -4,7 +4,11 @@ from pymongo import MongoClient
 import os
 
 app = FastAPI(
-    title="blogie", openapi_url="/api/openapi.json", docs_url=None, redoc_url="/api/doc"
+    title="Blogie-API",
+    description="A super simple REST API which allows you to search articles from a vast majority of websites.",
+    openapi_url="/api/openapi.json",
+    docs_url="/api/docs",
+    redoc_url="/api/doc",
 )
 
 origins = ["*"]
