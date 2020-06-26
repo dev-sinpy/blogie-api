@@ -1,23 +1,40 @@
 from typing import List
-from main import app
-from .schema import UserSchema, ArticleSchema, ArticleList, NewsList, TagsSchema
-from main.db_queries import *
-from fastapi import Depends, HTTPException, Query
 from random import shuffle
+from datetime import datetime
+
+from main import app
+from .db_queries import *
+from .schema import *
+from .utils import *
+
+from fastapi import Security, Depends, HTTPException, status, Query
+from fastapi.security.api_key import APIKey
+from fastapi.openapi.docs import get_swagger_ui_html
+from starlette.responses import JSONResponse
 
 
-async def main_params(q: str, limit: int = 20, page: int = 1):
-    limit: int = Query(20, title="hfehf", min_length=10, max_length="50")
-    return {"q": q.split(","), "limit": limit, "page": page}
+@app.get("/api/createtoken/{email}", response_model=Token)
+async def create_api_key(email: str):
+    """
+    Endpoint for generating API key for authentication. Make sure to\
+     first register an account on blogie and then provide your registered email \
+     as a path parameter.
+    """
+    try:
+        user = User(email)
+        user.get_user()
+        payload = {"email": email, "iat": datetime.utcnow()}
+        access_token = create_access_token(payload)
+
+        return {"status": "ok", "access_token": access_token}
+
+    except Exception:
+        raise HTTPException(status_code=403, detail="User not found")
 
 
-async def user_params(email: str, tags: str):
-    return {"email": email, "tags": tags.split(",")}
-
-
-@app.get("/api/", response_model=ArticleList)
+@app.get("/api/search", response_model=ArticleList)
 async def search(
-    q: str = Query(
+    keywords: str = Query(
         ...,
         title="query string",
         description="Topics you want to search for. If you want to search for multiple tags then separate them with a comma.",
@@ -26,6 +43,7 @@ async def search(
     page: int = Query(
         1, title="page", description="To skip over next page of response.", ge=1, le=10
     ),
+    api_key: APIKey = Depends(get_api_key),
 ):
     """
     Endpoint for searching articles.
@@ -37,54 +55,11 @@ async def search(
 
 
 @app.get("/api/news/", response_model=NewsList)
-async def news():
+async def news(api_key: APIKey = Depends(get_api_key)):
     """
-    Returns global news headlines.
+    Endpoint for getting global news headlines. This endpoint is currently \
+    very limited, but it is still great if you just want to get news headlines from\
+    around the world.
     """
     news = get_news()
     return {"status": "ok", "total_length": len(news), "data": news}
-
-
-@app.get("/api/tags/", include_in_schema=False, response_model=TagsSchema)
-async def tags():
-    return {"status": "ok", "data": get_tags()}
-
-
-@app.get("/api/user/{email}", include_in_schema=False, response_model=UserSchema)
-async def user(email: str):
-    try:
-        user = User(email)
-        response = {"status": "ok", "data": user.get_user()}
-        return response
-
-    except Exception:
-        raise HTTPException(status_code=404, detail="User not found")
-
-
-@app.post("/api/setuser/{email}", include_in_schema=False, status_code=201)
-async def set_user(email: str):
-    try:
-        user = User(email)
-        user.set_user()
-        return {"status": "ok"}
-
-    except Exception as err:
-        raise HTTPException(status_code=406, detail="email already in use")
-
-
-@app.post("/api/updateuser/", include_in_schema=False, status_code=200)
-async def update_user(params: dict = Depends(user_params)):
-    email = params["email"]
-    tags = params["tags"]
-    user = User(email, tags)
-    user.update_user()
-
-    return {"status": "ok"}
-
-
-@app.post("/api/deleteuser/{email}", include_in_schema=False, status_code=200)
-async def delete_user(email: str):
-    user = User(email)
-    user.delete_user()
-
-    return {"status": "ok"}

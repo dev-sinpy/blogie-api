@@ -1,9 +1,9 @@
 {
-    "version": 2,
-    "public": false,
-    "builds": [{ "src": "**/*.py", "use": "@now/python" }],
-    "routes": [
-      { "src": "/api/", "dest": "main/__init__.py" },
-      { "src": "/api/(.*)", "dest": "main/__init__.py" }
-    ]
+  "version": 2,
+  "public": false,
+  "builds": [{ "src": "**/*.py", "use": "@now/python" }],
+  "routes": [
+    { "src": "/(.*)", "dest": "main/__init__.py" },
+    { "src": "/(.*)", "dest": "main/__init__.py" }
+  ]
 }

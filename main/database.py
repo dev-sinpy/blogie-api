@@ -12,7 +12,7 @@
 # def start_db_connection():
 #     logging.info("starting connection")
 #     client.client = MongoClient(
-#         "mongodb+srv://admin:tdev9rbl@api-wqyyk.gcp.mongodb.net/"
+#         "url"
 #     )
 #     logging.info("started connection")
 

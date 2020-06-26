@@ -1,16 +1,7 @@
-from pydantic import BaseModel
-from typing import List, Dict
 from datetime import date
+from typing import List, Dict, Optional
 
-
-class User(BaseModel):
-    email: str
-    preferences: List[str]
-
-
-class UserSchema(BaseModel):
-    status: str
-    data: User
+from pydantic import BaseModel
 
 
 class TagsSchema(BaseModel):
@@ -47,3 +38,8 @@ class NewsList(BaseModel):
     status: str
     total_length: int
     data: List[NewsSchema]
+
+
+class Token(BaseModel):
+    status: str
+    access_token: str

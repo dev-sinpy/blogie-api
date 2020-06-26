@@ -3,12 +3,25 @@ from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 import os
 
+
 app = FastAPI(
     title="Blogie-API",
-    description="A super simple REST API which allows you to search articles from a vast majority of websites.",
+    description="A super simple REST API which allows you \
+    to search articles from a vast majority of websites.\
+    \n ### Features:\
+    \n - Search for articles with specific tags, e.g. 'bitcoin'.\
+    \n - Search for articles using multiple keywords, e.g. 'bitcoin', 'iphone'.\
+    \n - Get global news headlines with news source. \
+    \n - Free and opensource.\
+    \n ### Prerequisites:\
+    \n **API key**: You would need a API key for requesting any data \
+    from our API. You can generate one by registering \
+    an account on blogie and after that do a GET request to '''/api/createtoken/{email}''' \
+    with your registered email. \
+    ",
     openapi_url="/api/openapi.json",
-    docs_url="/api/docs",
-    redoc_url="/api/doc",
+    docs_url="/swagger",
+    redoc_url="/",
 )
 
 origins = ["*"]
