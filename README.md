@@ -2,7 +2,7 @@
 
 ## Overview
 
-A REST API which allows developers to search articles and news from a vast majority of websites. Built using FastAPI and python.
+A REST API which allows developers to search articles and news from a vast majority of websites. Built using [FastAPI](https://fastapi.tiangolo.com/) and Python.
 
 ## Features
 
