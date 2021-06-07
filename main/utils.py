@@ -1,8 +1,7 @@
-import os
-
 from .schema import *
+from . import SECRET_KEY
 
-import jwt
+
 from jwt.exceptions import InvalidSignatureError, DecodeError
 from fastapi import Depends, HTTPException, Security
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -10,7 +9,8 @@ from jwt import PyJWTError
 from fastapi.security.api_key import APIKeyQuery, APIKeyHeader, APIKey
 from starlette.status import HTTP_403_FORBIDDEN
 
-SECRET_KEY = os.environ["SECRET_KEY"]
+import jwt
+import os
 
 
 API_KEY_NAME = "apikey"

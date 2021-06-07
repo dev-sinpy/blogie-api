@@ -22,13 +22,13 @@ async def create_api_key(email: str):
     """
     try:
         user = User(email)
-        user.get_user()
         payload = {"email": email, "iat": datetime.utcnow()}
         access_token = create_access_token(payload)
 
         return {"status": "ok", "access_token": access_token}
 
-    except Exception:
+    except Exception as Err:
+        print(Err)
         raise HTTPException(status_code=403, detail="User not found")
 
 

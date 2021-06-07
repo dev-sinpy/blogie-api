@@ -1,7 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
+from dotenv import load_dotenv
+
 import os
+
+
+load_dotenv()  # take environment variables from .env.
 
 
 app = FastAPI(
@@ -24,7 +29,8 @@ app = FastAPI(
     redoc_url="/",
 )
 
-origins = ["*"]
+# set up cross site origin policies
+origins = ["*"] 
 
 app.add_middleware(
     CORSMiddleware,
@@ -38,6 +44,8 @@ app.add_middleware(
 # app.add_event_handler("shutdown", close_db_connection)
 
 client = MongoClient(os.environ["DB_URI"])
+
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 db = client.blogie
 
