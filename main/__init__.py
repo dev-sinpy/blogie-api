@@ -11,21 +11,19 @@ load_dotenv()  # take environment variables from .env.
 
 app = FastAPI(
     title="Blogie-API",
-    description="A super simple REST API which allows you \
-    to search articles from a vast majority of websites.\
+    description="A REST API for searching articles and news from a vast majority of websites.\
     \n ### Features:\
     \n - Search for articles with specific tags, e.g. 'bitcoin'.\
     \n - Search for articles using multiple keywords, e.g. 'bitcoin', 'iphone'.\
     \n - Get global news headlines with news source. \
     \n - Free and opensource.\
     \n ### Prerequisites:\
-    \n **API key**: You would need a API key for requesting any data \
-    from our API. You can generate one by registering \
-    an account on blogie and after that do a GET request to '''/api/createtoken/{email}''' \
+    \n **API key**: You would need a API key for requesting any data from our API. You can generate one by registering \
+    an account on [blogie](https://blogie.vercel.app) and after that do a GET request to '''/api/createtoken/{email}''' \
     with your registered email. \
     ",
     openapi_url="/api/openapi.json",
-    docs_url="/swagger",
+    docs_url="/docs",
     redoc_url="/",
 )
 
