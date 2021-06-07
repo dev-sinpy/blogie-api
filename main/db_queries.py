@@ -43,6 +43,31 @@ class User:
         return True
 
 
+def get_tags():
+    collection = db["tags"]
+    tags = collection.find_one({})
+    return tags["tags"]
+
+
+def get_article_by_tag(tag, limit, page):
+    collection = db["data"]
+    skip = limit if page > 1 else 0
+    articles = []
+    for article in collection.find({"tags": tag}, skip=skip, limit=limit).sort(
+        "publish_date", -1
+    ):
+        article["searched_for"] = tag
+        articles.append(article)
+    return articles
+
+
+def get_articles(tags, limit, page):
+    articles = []
+    bisect = limit // len(tags)
+    for tag in tags:
+        articles.extend(get_article_by_tag(tag, bisect, page))
+    return articles
+
 def get_news() -> list:
     rss = requests.get("https://news.google.com/rss/search?q=news").content
     root = ET.fromstring(rss)[0]

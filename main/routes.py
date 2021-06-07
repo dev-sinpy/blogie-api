@@ -3,7 +3,7 @@ from random import shuffle
 from datetime import datetime
 
 from main import app
-from .db_queries import *
+from .db_queries import User, get_news, get_articles
 from .schema import *
 from .utils import *
 
@@ -48,7 +48,7 @@ async def search(
     """
     Endpoint for searching articles.
     """
-    tags: list = q.split(",")
+    tags: list = keywords.split(",")
     shuffle(tags)
     articles: list = get_articles(tags, limit, page)
     return {"status": "ok", "total_length": len(articles), "data": articles}
