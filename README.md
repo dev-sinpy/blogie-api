@@ -13,4 +13,4 @@ A REST API which allows developers to search articles and news from a vast major
 
 ## Documentation
 
-Documentation can be found [here](https://blogie-api.now.sh/docs/)
+Documentation can be found [here](https://blogie-api.now.sh/)

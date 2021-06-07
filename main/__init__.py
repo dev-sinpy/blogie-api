@@ -23,8 +23,8 @@ app = FastAPI(
     with your registered email. \
     ",
     openapi_url="/api/openapi.json",
-    docs_url="/docs",
-    redoc_url="/",
+    docs_url="/",
+    redoc_url="/redoc",
 )
 
 # set up cross site origin policies
